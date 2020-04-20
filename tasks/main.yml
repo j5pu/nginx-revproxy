@@ -19,7 +19,7 @@
     - name: nginx show
       systemd:
         name: nginx
-        status: started
+        state: started
       register: nginx_status
 
     - debug: var=nginx_status
