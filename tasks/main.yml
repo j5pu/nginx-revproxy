@@ -23,15 +23,15 @@
         - nginxrevproxy
         - packages
 
-    - debug: var=item.value.ssl_certificate_path_src
+    - debug: var=item.value['ssl_certificate_path_src']
       when:
-        - item.value.ssl_certificate_path_src is defined
-        - item.value.ssl_certificate is defined
+        - item.value['ssl_certificate_path_src'] is defined
+        - item.value['ssl_certificate'] is defined
       with_dict: "{{ nginx_revproxy_sites }}"
       tags:
         - prueba
 
-    - debug: var=item.value.item.value.ssl_certificate
+    - debug: var=item.value.ssl_certificate
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
         - item.value.ssl_certificate_path_src is defined
@@ -40,7 +40,7 @@
       tags:
         - prueba
     - fail:
-      
+
     - name: prueba
       file:
         src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
