@@ -1,20 +1,15 @@
 ---
 - name: block nginx-revproxy
   block:
-    # - name: Install Nginx and ssl-cert
-    #   apt:
-    #     name:
-    #       - nginx
-    #       - ssl-cert
-    #     state: present
-    #   register:
-    #     nginxinstalled
-    #   delay: 10
-    #   retries: 12
-    #   until: nginxinstalled is successful
-    #   tags:
-    #     - nginxrevproxy
-    #     - packages
+    - name: Install Nginx and ssl-cert
+      apt:
+        name:
+          - nginx
+          - ssl-cert
+        state: present
+      tags:
+        - nginxrevproxy
+        - packages
 
     - name: nginx show
       systemd:
@@ -28,13 +23,8 @@
         - nginxrevproxy
         - packages
 
-    - debug: var=nginx_status
-
-    - fail:
-      when: nginx_status['status']['SubState'] != 'running' and nginx_status['status']['ActiveState'] != 'active'
     - debug: var=item.value.ssl_certificate_path_src
       when:
-        - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate is defined
       with_dict: "{{ nginx_revproxy_sites }}"
@@ -44,32 +34,30 @@
     - debug: var=item.value.item.value.ssl_certificate
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
-        - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate is defined
         - item.value.ssl_certificate is defined
       tags:
         - prueba
-
+    - fail:
+      
     - name: prueba
       file:
         src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
         path: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
-        - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate is defined
       tags:
         - prueba
-    - fail:
+
     - name: copy certificates .pem
       file:
         src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
         path: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
-        - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate is defined
       tags:
@@ -81,7 +69,6 @@
         path: "/etc/ssl/certs/{{ item.value.ssl_certificate_key }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
-        - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate_key is defined
       tags:
@@ -138,7 +125,6 @@
         password: "{{ item.value.auth.password }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
-        - nginxinstalled is success
         - item.value.auth.htpasswd is defined and item.value.auth.htpasswd
         - item.value.auth.login is defined
         - item.value.auth.password is defined
@@ -155,7 +141,6 @@
       register:
         siteconfig
       when:
-        - nginxinstalled is success
         - not item.value.ssl | default(True)
         - not item.value.letsencrypt | default(True)
       tags:
@@ -171,7 +156,6 @@
       register:
         siteconfig
       when:
-        - nginxinstalled is success
         - item.value.ssl | default(False)
         - not item.value.letsencrypt | default(True)
       tags:
@@ -219,8 +203,6 @@
         group: www-data
       with_dict: "{{ nginx_revproxy_sites }}"
       notify: Reload Nginx
-      when:
-        - nginxinstalled is success
       tags:
         - nginxrevproxy
 
@@ -234,8 +216,6 @@
         recurse: true
       with_dict: "{{ nginx_revproxy_sites }}"
       notify: Reload Nginx
-      when:
-        - nginxinstalled is success
       tags:
         - nginxrevproxy
 
