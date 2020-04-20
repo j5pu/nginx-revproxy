@@ -35,31 +35,6 @@
       tags:
         - nginxrevproxy
 
-    # - name: copy certificates .pem
-    #   copy:
-    #     src: "{{ item.value.ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
-    #     dest: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
-    #     follow: True
-    #   with_dict: "{{ nginx_revproxy_sites }}"
-    #   when:
-    #     - item.value.ssl_certificate_path_src is defined
-    #     - item.value.ssl_certificate is defined
-    #   tags:
-    #     - nginxrevproxy
-    #
-    # - name: copy certificates .key
-    #   copy:
-    #     src: "{{ item.value.ssl_certificate_path_src}}/{{ item.value.ssl_certificate_key }} "
-    #     dest: "/etc/ssl/certs/{{ item.value.ssl_certificate_key }}"
-    #     follow: True
-    #   with_dict: "{{ nginx_revproxy_sites }}"
-    #   when:
-    #     - item.value.ssl_certificate_path_src is defined
-    #     - item.value.ssl_certificate_key is defined
-    #   tags:
-    #     - nginxrevproxy
-
-    - fail:
     - name: Install python-passlib for Python 3 hosts
       apt:
         name:
