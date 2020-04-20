@@ -25,8 +25,8 @@ server {
    error_log /var/log/nginx/{{ item.key }}_error.log error;
 
    ssl on;
-   ssl_certificate /etc/ssl/certs/{{ ssl_certificate }};
-   ssl_certificate_key /etc/ssl/private/{{ ssl_certificate_key }};
+   ssl_certificate {{ item.value.ssl_certicate_path_dest }}/{{ item.value.ssl_certificate }};
+   ssl_certificate_key {{ item.value.ssl_certicate_path_dest }}/{{ item.value.ssl_certificate_key }};
    ssl_session_timeout {{ item.value.ssl_session_timeout | default('5m') }};
    ssl_session_timeout 5m;
    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -73,12 +73,12 @@ server {
 
    ssl on;
 {% if item.value.ssl_certificate is defined %}
-   ssl_certificate /etc/ssl/certs/{{ item.value.ssl_certificate }};
+   ssl_certificate {{ item.value.ssl_certicate_path_dest }}/{{ item.value.ssl_certificate }};
 {% else %}
    ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
 {% endif %}
 {% if item.value.ssl_certificate_key is defined %}
-   ssl_certificate_key /etc/ssl/private/{{ item.value.ssl_certificate_key }};
+   ssl_certificate_key {{ item.value.ssl_certicate_path_dest }}/{{ item.value.ssl_certificate_key }};
 {% else %}
    ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
 {% endif %}

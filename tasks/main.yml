@@ -24,11 +24,14 @@
 
     - name: make certs directory
       file:
-        name: "{{ ssl_certicate_path_dest }}"
+        name: "{{ item.value.ssl_certicate_path_dest }}"
         state: directory
         owner: root
         group: ssl-cert
         mode: go-r
+      with_dict: "{{ nginx_revproxy_sites }}"
+      when:
+        - item.value.ssl_certicate_path_dest is defined
       tags:
         - nginxrevproxy
 
