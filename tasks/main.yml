@@ -67,6 +67,15 @@
       when:
         - ansible_python['version']['major'] == 2
 
+    - name: add http proxy parameters
+      template:
+        src: proxy.conf.j2
+        dest: /etc/nginx/conf.d/proxy.conf
+        owner: root
+        group: root
+      notify: Reload Nginx
+      when: nginx_proxy_conf is defined
+
     - name: Set up nginx directories
       file:
         path: "/etc/nginx/{{ item }}"
