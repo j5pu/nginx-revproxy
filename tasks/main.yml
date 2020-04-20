@@ -21,7 +21,16 @@
       until: nginx_status['status']['SubState'] == 'running' and nginx_status['status']['ActiveState'] == 'active'
       tags:
         - nginxrevproxy
-        - packages
+
+    - name: make certs directory
+      file:
+        name: "{{ ssl_certicate_path_dest }}"
+        state: directory
+        owner: root
+        group: ssl-cert
+        mode: go-r
+      tags:
+        - nginxrevproxy
 
     - name: rsync certificates
       synchronize:

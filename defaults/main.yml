@@ -15,6 +15,7 @@ nginx_revproxy_sites:                                         # List of sites to
     letsencrypt: false                                        # Set to True if you want use letsencrypt
     letsencrypt_email: ""
     ssl_certificate_path_src: files                                     # Set email for letencrypt cert
+    ssl_certicate_path_dest: /etc/ssl/example.com
     ssl_certificate: example.com.pem
     ssl_certificate_key: example.com.key
     client_max_body_size: '50M'
