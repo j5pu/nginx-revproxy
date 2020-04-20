@@ -47,7 +47,7 @@ server {
    listen    [::]:{{ item.value.listen | default(80) }};
    server_name    {{ item.value.domains | join(' ') }};
    location / {
-   return         301 return 301 https://$host$request_uri;
+   return 301    https://$host$request_uri;
    }
 
    location /.well-known/acme-challenge {
