@@ -21,9 +21,17 @@
         name: nginx
         state: started
       register: nginx_status
+      delay: 10
+      retries: 12
+      until: nginx_status['status']['SubState'] == 'running' and nginx_status['status']['ActiveState'] == 'active'
+      tags:
+        - nginxrevproxy
+        - packages
 
     - debug: var=nginx_status
 
+    - fail:
+      when: nginx_status['status']['SubState'] != 'running' and nginx_status['status']['ActiveState'] != 'active'
     - debug: var=item.value.ssl_certificate_path_src
       when:
         - nginxinstalled is success
