@@ -79,8 +79,8 @@
     - name: edit nginx.conf
       lineinfile:
         path: /etc/nginx/nginx.conf
-        regexp: "item.key "
-        line: "item.key {{ item.value }};"
+        regexp: "{{ item.key }} "
+        line: "{{ item.key }} {{ item.value }};"
         owner: root
         group: root
         insertafter: '^http {'
