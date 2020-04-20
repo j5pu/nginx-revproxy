@@ -132,6 +132,7 @@
         dest: /etc/nginx/sites-available/{{ item.key }}.conf
         owner: root
         group: root
+      notify: Reload Nginx
       with_dict: "{{ nginx_revproxy_sites }}"
       register:
         siteconfig
@@ -147,6 +148,7 @@
         dest: /etc/nginx/sites-available/{{ item.key }}.conf
         owner: root
         group: root
+      notify: Reload Nginx
       with_dict: "{{ nginx_revproxy_sites }}"
       register:
         siteconfig
