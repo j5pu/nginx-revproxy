@@ -1,20 +1,28 @@
 ---
 - name: block nginx-revproxy
   block:
-    - name: Install Nginx and ssl-cert
-      apt:
-        name:
-          - nginx
-          - ssl-cert
-        state: present
-      register:
-        nginxinstalled
-      delay: 10
-      retries: 12
-      until: nginxinstalled is successful
-      tags:
-        - nginxrevproxy
-        - packages
+    # - name: Install Nginx and ssl-cert
+    #   apt:
+    #     name:
+    #       - nginx
+    #       - ssl-cert
+    #     state: present
+    #   register:
+    #     nginxinstalled
+    #   delay: 10
+    #   retries: 12
+    #   until: nginxinstalled is successful
+    #   tags:
+    #     - nginxrevproxy
+    #     - packages
+
+    - name: nginx show
+      systemd:
+        name: nginx
+        status: started
+      register: nginx_status
+
+    - debug: var=nginx_status
 
     - debug: var=item.value.ssl_certificate_path_src
       when:
