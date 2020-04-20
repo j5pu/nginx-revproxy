@@ -4,7 +4,7 @@
 ################################################################################
 
 {% if nginx_proxy_conf is defined %}
-{% for item in nginx_proxy_conf|dict2items %}
+{% for item in nginx_proxy_conf | dict2items %}
 {{ item.key }} {{ item.value }};
 {% endfor %}
 {% endif %}

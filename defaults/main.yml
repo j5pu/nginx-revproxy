@@ -24,10 +24,10 @@ nginx_revproxy_sites:                                         # List of sites to
       password:
 
 nginx_proxy_conf:
-  - proxy_send_timeout: 120
-  - proxy_read_timeout: 300
-  - proxy_buffering: 'off'
+  proxy_send_timeout: 120
+  proxy_read_timeout: 300
+  proxy_buffering: 'off'
 
 nginx_revproxy_http:
-  - keepalive_timeout: '5 5'
-  - tcp_nodelay: 'on'
+  keepalive_timeout: '5 5'
+  tcp_nodelay: 'on'
