@@ -24,9 +24,9 @@
         - packages
 
     - name: copy certificates .pem
-      file:
+      copy:
         src: "{{ item.value.ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
-        path: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
+        dest: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
         - item.value.ssl_certificate_path_src is defined
@@ -35,9 +35,9 @@
         - nginxrevproxy
 
     - name: copy certificates .key
-      file:
+      copy:
         src: "{{ item.value.ssl_certificate_path_src}}/{{ item.value.ssl_certificate_key }} "
-        path: "/etc/ssl/certs/{{ item.value.ssl_certificate_key }}"
+        dest: "/etc/ssl/certs/{{ item.value.ssl_certificate_key }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
         - item.value.ssl_certificate_path_src is defined
