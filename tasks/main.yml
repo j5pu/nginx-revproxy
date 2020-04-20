@@ -23,37 +23,9 @@
         - nginxrevproxy
         - packages
 
-    - debug: var=item.value['ssl_certificate_path_src']
-      when:
-        - item.value['ssl_certificate_path_src'] is defined
-        - item.value['ssl_certificate'] is defined
-      with_dict: "{{ nginx_revproxy_sites }}"
-      tags:
-        - prueba
-
-    - debug: var=item.value.ssl_certificate
-      with_dict: "{{ nginx_revproxy_sites }}"
-      when:
-        - item.value.ssl_certificate_path_src is defined
-        - item.value.ssl_certificate is defined
-        - item.value.ssl_certificate is defined
-      tags:
-        - prueba
-
-    - name: prueba
-      file:
-        src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
-        path: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
-      with_dict: "{{ nginx_revproxy_sites }}"
-      when:
-        - item.value.ssl_certificate_path_src is defined
-        - item.value.ssl_certificate is defined
-      tags:
-        - prueba
-
     - name: copy certificates .pem
       file:
-        src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
+        src: "{{ item.value.ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
         path: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
@@ -64,7 +36,7 @@
 
     - name: copy certificates .key
       file:
-        src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate_key }} "
+        src: "{{ item.value.ssl_certificate_path_src}}/{{ item.value.ssl_certificate_key }} "
         path: "/etc/ssl/certs/{{ item.value.ssl_certificate_key }}"
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
