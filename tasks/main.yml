@@ -83,7 +83,7 @@
         owner: root
         group: root
         insertafter: '^http {'
-      loop: nginx_revproxy_http | dict2items
+      loop: "{{ nginx_revproxy_http | dict2items }}"
       notify: Reload Nginx
       when: nginx_revproxy_http is defined
 
