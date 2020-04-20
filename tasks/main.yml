@@ -16,6 +16,38 @@
         - nginxrevproxy
         - packages
 
+    - debug: var=item.value.ssl_certificate_path_src
+      when:
+        - nginxinstalled is success
+        - item.value.ssl_certificate_path_src is defined
+        - item.value.ssl_certificate is defined
+      with_dict: "{{ nginx_revproxy_sites }}"
+        - item.value.ssl_certificate is defined
+      tags:
+        - prueba
+
+    - debug: var=item.value.item.value.ssl_certificate
+      with_dict: "{{ nginx_revproxy_sites }}"
+      when:
+        - nginxinstalled is success
+        - item.value.ssl_certificate_path_src is defined
+        - item.value.ssl_certificate is defined
+        - item.value.ssl_certificate is defined
+      tags:
+        - prueba
+
+    - name: prueba
+      file:
+        src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
+        path: "/etc/ssl/certs/{{ item.value.ssl_certificate }}"
+      with_dict: "{{ nginx_revproxy_sites }}"
+      when:
+        - nginxinstalled is success
+        - item.value.ssl_certificate_path_src is defined
+        - item.value.ssl_certificate is defined
+      tags:
+        - prueba
+    - fail:
     - name: copy certificates .pem
       file:
         src: "{{ ssl_certificate_path_src}}/{{ item.value.ssl_certificate }} "
@@ -25,6 +57,8 @@
         - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate is defined
+      tags:
+        - nginxrevproxy
 
     - name: copy certificates .key
       file:
@@ -35,6 +69,8 @@
         - nginxinstalled is success
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate_key is defined
+      tags:
+        - nginxrevproxy
 
     - name: Install python-passlib for Python 3 hosts
       apt:
