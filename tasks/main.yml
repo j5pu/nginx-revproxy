@@ -39,7 +39,6 @@
         - item.value.ssl_certificate is defined
       tags:
         - prueba
-    - fail:
 
     - name: prueba
       file:
@@ -74,6 +73,7 @@
       tags:
         - nginxrevproxy
 
+    - fail:
     - name: Install python-passlib for Python 3 hosts
       apt:
         name:
