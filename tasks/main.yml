@@ -22,7 +22,6 @@
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certificate is defined
       with_dict: "{{ nginx_revproxy_sites }}"
-        - item.value.ssl_certificate is defined
       tags:
         - prueba
 
