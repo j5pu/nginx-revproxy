@@ -76,6 +76,17 @@
       notify: Reload Nginx
       when: nginx_proxy_conf is defined
 
+    - name: edit nginx.conf
+      lineinfile:
+        regexp: "item.key "
+        line: "item.key {{ item.value }};"
+        owner: root
+        group: root
+        insertafter: '^http {'
+      loop: nginx_revproxy_http | dict2items
+      notify: Reload Nginx
+      when: nginx_revproxy_http is defined
+
     - name: Set up nginx directories
       file:
         path: "/etc/nginx/{{ item }}"
