@@ -80,7 +80,7 @@
       lineinfile:
         path: /etc/nginx/nginx.conf
         regexp: "{{ item.key }} "
-        line: "{{ item.key }} {{ item.value }};"
+        line: "        {{ item.key }} {{ item.value }};"
         owner: root
         group: root
         insertafter: '^http {'
