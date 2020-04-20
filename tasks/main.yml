@@ -38,12 +38,13 @@
     - name: rsync certificates
       synchronize:
         src: "{{ item.value.ssl_certificate_path_src}}/"
-        dest: /etc/ssl/certs
+        dest: "{{ item.value.ssl_certicate_path_dest }}"
         copy_links: yes
         recursive: yes
       with_dict: "{{ nginx_revproxy_sites }}"
       when:
         - item.value.ssl_certificate_path_src is defined
+        - item.value.ssl_certicate_path_dest is defined
       tags:
         - nginxrevproxy
 
