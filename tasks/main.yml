@@ -43,6 +43,7 @@
         copy_links: yes
         recursive: yes
       with_dict: "{{ nginx_revproxy_sites }}"
+      changed_when: False
       when:
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certicate_path_dest is defined
