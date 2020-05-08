@@ -53,7 +53,6 @@
         - site_enabled is success
   when:
     - active.changed
-    - nginxinstalled is success
   tags:
     - lesencrypt
     - nginxrevproxy
