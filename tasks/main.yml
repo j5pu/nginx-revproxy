@@ -8,7 +8,7 @@
           - ssl-cert
         state: present
       tags:
-        - nginxrevproxy
+        - nginx
         - packages
 
     - name: nginx show
@@ -20,7 +20,7 @@
       retries: 12
       until: nginx_status['status']['SubState'] == 'running' and nginx_status['status']['ActiveState'] == 'active'
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: make certs directory
       file:
@@ -34,7 +34,7 @@
       when:
         - item.value.ssl_certicate_path_dest is defined
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: rsync certificates
       synchronize:
@@ -48,7 +48,7 @@
         - item.value.ssl_certificate_path_src is defined
         - item.value.ssl_certicate_path_dest is defined
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Install python-passlib for Python 3 hosts
       apt:
@@ -61,7 +61,7 @@
       retries: 12
       until: result is successful
       tags:
-        - nginxrevproxy
+        - nginx
         - packages
       when:
         - ansible_python['version']['major'] == 3
@@ -77,7 +77,7 @@
       retries: 12
       until: result is successful
       tags:
-        - nginxrevproxy
+        - nginx
         - packages
       when:
         - ansible_python['version']['major'] == 2
@@ -113,7 +113,7 @@
         - sites-available
         - sites-enabled
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Add authentication
       htpasswd:
@@ -126,7 +126,7 @@
         - item.value.auth.login is defined
         - item.value.auth.password is defined
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Add Site Config
       template:
@@ -136,13 +136,11 @@
         group: root
       notify: Reload Nginx
       with_dict: "{{ nginx_revproxy_sites }}"
-      register:
-        siteconfig
       when:
         - not item.value.ssl | default(True)
         - not item.value.letsencrypt | default(True)
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Add Https Site Config
       template:
@@ -152,13 +150,11 @@
         group: root
       notify: Reload Nginx
       with_dict: "{{ nginx_revproxy_sites }}"
-      register:
-        siteconfig
       when:
         - item.value.ssl | default(False)
         - not item.value.letsencrypt | default(True)
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Get Active Sites
       command: ls -1 /etc/nginx/sites-enabled/
@@ -166,7 +162,7 @@
       check_mode: false
       register: active
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: De-activate Sites
       file:
@@ -177,7 +173,7 @@
       when:
         - item not in nginx_revproxy_sites
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Enable Site Config
       file:
@@ -187,11 +183,10 @@
       with_dict: "{{ nginx_revproxy_sites }}"
       notify: Reload Nginx
       when:
-        - siteconfig is success
         - not item.value.letsencrypt | default(True)
         - not ansible_check_mode
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Create WebRoot sites
       file:
@@ -203,7 +198,7 @@
       with_dict: "{{ nginx_revproxy_sites }}"
       notify: Reload Nginx
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: WebRoot Permissions Sites
       file:
@@ -216,7 +211,7 @@
       with_dict: "{{ nginx_revproxy_sites }}"
       notify: Reload Nginx
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Get WebRoot Sites
       command: ls -1 /var/www/
@@ -224,7 +219,7 @@
       check_mode: false
       register: webroot
       tags:
-        - nginxrevproxy
+        - nginx
 
     - name: Remove WebRoot Sites
       file:
@@ -235,10 +230,10 @@
       when:
         - item not in nginx_revproxy_sites
       tags:
-        - nginxrevproxy
+        - nginx
 
     - include_tasks: letsencrypt.yml
       tags:
         - lesencrypt
-        - nginxrevproxy
+        - nginx
   when: nginx_revproxy and ansible_distribution != "MacOSX"
